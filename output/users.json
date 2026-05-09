@@ -5,13 +5,18 @@
     "isAdmin": true
   },
   {
-    "username": "Arul",
-    "password": "113",
-    "isAdmin": false
+    "username": "Bintang",
+    "password": "132",
+    "isAdmin": true
   },
   {
-    "username": "Agus",
-    "password": "123",
-    "isAdmin": false
+    "username": "Dirga",
+    "password": "115",
+    "isAdmin": true
+  },
+  {
+    "username": "Dika",
+    "password": "130",
+    "isAdmin": true
   }
 ]

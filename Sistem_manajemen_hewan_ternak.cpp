@@ -84,8 +84,9 @@ void simpanUsersKeFile(vector<Akun>& users) {
 
 void bacaUsersDariFile(vector<Akun>& users) {
     ifstream file("users.json");
+    users.clear();
+    
     if (file.is_open()) {
-        users.clear();
         string line;
         Akun temp;
         bool isNewEntry = false;
@@ -107,12 +108,27 @@ void bacaUsersDariFile(vector<Akun>& users) {
             }
         }
         file.close();
-    } else {
-        Akun adminDefault;
-        adminDefault.username = "Aril";
-        adminDefault.password = "119";
-        adminDefault.isAdmin = true;
-        users.push_back(adminDefault);
+    }
+    
+    // TAMBAHKAN ADMIN DEFAULT
+    bool adaAdmin = false;
+    for (const auto& user : users) {
+        if (user.isAdmin) { adaAdmin = true; break; }
+    }
+    
+    if (!adaAdmin) {
+        Akun admin1; admin1.username = "Aril"; admin1.password = "119"; admin1.isAdmin = true;
+        users.push_back(admin1);
+        
+        Akun admin2; admin2.username = "Bintang"; admin2.password = "132"; admin2.isAdmin = true;
+        users.push_back(admin2);
+        
+        Akun admin3; admin3.username = "Dirga"; admin3.password = "115"; admin3.isAdmin = true;
+        users.push_back(admin3);
+        
+        Akun admin4; admin4.username = "Dika"; admin4.password = "130"; admin4.isAdmin = true;
+        users.push_back(admin4);
+        
         simpanUsersKeFile(users);
     }
 }
@@ -255,7 +271,7 @@ void bacaPengajuanDariFile(Pengajuan data[], int *jumlah) {
     }
 }
 
-// TAMPILAN DATA (TABEL RAPI)
+// TAMPILAN DATA TABEL
 void tampilDataTabel(Hewan ternak[], int jumlah) {
     if (jumlah == 0) {
         cout << "Belum ada data hewan ternak.\n";
@@ -276,7 +292,9 @@ void tampilDataTabel(Hewan ternak[], int jumlah) {
 // CRUD TERNAK
 void tambahData(Hewan ternak[], int *jumlah) {
     bersihkanLayar();
-    cout << "\n=== Tambah Data Hewan ===\n";
+    cout << "\n========================================\n";
+    cout << "=           TAMBAH DATA HEWAN          =\n";
+    cout << "========================================\n";
     cout << "ID Hewan   : "; cin >> ternak[*jumlah].id;
     cout << "Nama Hewan : "; cin.ignore(); getline(cin, ternak[*jumlah].nama);
     cout << "Umur       : "; cin >> ternak[*jumlah].umur;
@@ -290,8 +308,9 @@ void tambahData(Hewan ternak[], int *jumlah) {
 
 void tampilData(Hewan ternak[], int jumlah) {
     bersihkanLayar();
-    cout << "\nData Hewan Ternak\n";
-    cout << "========================================\n";
+    cout << "\n===================================================\n";
+    cout << "=                DATA HEWAN TERNAK                =\n";
+    cout << "===================================================\n";
     tampilDataTabel(ternak, jumlah);
     cout << "\nTekan Enter untuk kembali..."; cin.ignore(); cin.get();
     bersihkanLayar();
@@ -300,6 +319,9 @@ void tampilData(Hewan ternak[], int jumlah) {
 void updateData(Hewan ternak[], int jumlah) {
     bersihkanLayar();
     int cari;
+    cout << "\n========================================\n";
+    cout << "=           UPDATE DATA HEWAN          =\n";
+    cout << "========================================\n";
     cout << "Masukkan ID yang ingin diupdate: "; cin >> cari;
     for (int i = 0; i < jumlah; i++) {
         if (ternak[i].id == cari) {
@@ -321,6 +343,9 @@ void updateData(Hewan ternak[], int jumlah) {
 void hapusData(Hewan ternak[], int *jumlah) {
     bersihkanLayar();
     int cari;
+    cout << "\n========================================\n";
+    cout << "=           HAPUS DATA HEWAN           =\n";
+    cout << "========================================\n";
     cout << "Masukkan ID yang ingin dihapus: "; cin >> cari;
     for (int i = 0; i < *jumlah; i++) {
         if (ternak[i].id == cari) {
@@ -395,8 +420,8 @@ void menuSorting(Hewan ternak[], int jumlah) {
     int pilih;
     do {
         bersihkanLayar();
-        cout << "========================================\n";
-        cout << "=        MENU SORTING DATA             =\n";
+        cout << "\n========================================\n";
+        cout << "=           MENU SORTING DATA          =\n";
         cout << "========================================\n";
         cout << "1. Ascending  (A -> Z)\n";
         cout << "2. Descending (Z -> A)\n";
@@ -408,21 +433,14 @@ void menuSorting(Hewan ternak[], int jumlah) {
         cout << "========================================\n";
         cout << "Pilih: "; cin >> pilih;
 
-        if (pilih == 1) {
-            sortingNama(ternak, jumlah, true);
-        } else if (pilih == 2) {
-            sortingNama(ternak, jumlah, false);
-        } else if (pilih == 3) {
-            sortingUmur(ternak, jumlah, true);
-        } else if (pilih == 4) {
-            sortingUmur(ternak, jumlah, false);
-        } else if (pilih == 5) {
-            sortingBerat(ternak, jumlah, true);
-        } else if (pilih == 6) {
-            sortingBerat(ternak, jumlah, false);
-        } else if (pilih == 7) {
-            return;
-        } else {
+        if (pilih == 1) sortingNama(ternak, jumlah, true);
+        else if (pilih == 2) sortingNama(ternak, jumlah, false);
+        else if (pilih == 3) sortingUmur(ternak, jumlah, true);
+        else if (pilih == 4) sortingUmur(ternak, jumlah, false);
+        else if (pilih == 5) sortingBerat(ternak, jumlah, true);
+        else if (pilih == 6) sortingBerat(ternak, jumlah, false);
+        else if (pilih == 7) return;
+        else {
             cout << "Pilihan tidak valid!\n";
             cin.ignore(); cin.get();
         }
@@ -433,6 +451,9 @@ void menuSorting(Hewan ternak[], int jumlah) {
 void cariData(Hewan ternak[], int jumlah) {
     bersihkanLayar();
     int cari;
+    cout << "\n========================================\n";
+    cout << "=            CARI DATA HEWAN           =\n";
+    cout << "========================================\n";
     cout << "Masukkan ID yang dicari: "; cin >> cari;
     bool ditemukan = false;
     for (int i = 0; i < jumlah; i++) {
@@ -454,7 +475,9 @@ void cariData(Hewan ternak[], int jumlah) {
 // CRUD PENGAJUAN - USER
 void tambahPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
     bersihkanLayar();
-    cout << "\n=== Tambah Pengajuan ===\n";
+    cout << "\n========================================\n";
+    cout << "=           TAMBAH PENGAJUAN           =\n";
+    cout << "========================================\n";
     cout << "ID Hewan   : "; cin >> data[*jumlah].id;
     cout << "Nama Hewan : "; cin.ignore(); getline(cin, data[*jumlah].namaHewan);
     cout << "Umur       : "; cin >> data[*jumlah].umur;
@@ -475,6 +498,9 @@ void tambahPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
 
 void tampilPengajuanUser(Pengajuan data[], int jumlah, string usernameUser) {
     bersihkanLayar();
+    cout << "\n========================================\n";
+    cout << "=            PENGAJUAN ANDA            =\n";
+    cout << "========================================\n";
     if (jumlah == 0) { 
         cout << "Belum ada pengajuan.\n"; 
         cout << "Tekan Enter..."; cin.ignore(); cin.get(); 
@@ -483,7 +509,6 @@ void tampilPengajuanUser(Pengajuan data[], int jumlah, string usernameUser) {
     }
     
     bool ada = false;
-    cout << "\nData Pengajuan Anda:\n\n";
     for (int i = 0; i < jumlah; i++) {
         if (data[i].usernamePengaju == usernameUser) {
             ada = true;
@@ -504,6 +529,9 @@ void tampilPengajuanUser(Pengajuan data[], int jumlah, string usernameUser) {
 void updatePengajuan(Pengajuan data[], int jumlah, string usernameUser) {
     bersihkanLayar();
     int cari; 
+    cout << "\n========================================\n";
+    cout << "=           UPDATE PENGAJUAN           =\n";
+    cout << "========================================\n";
     cout << "Masukkan ID pengajuan: "; cin >> cari;
     for (int i = 0; i < jumlah; i++) {
         if (data[i].id == cari && data[i].usernamePengaju == usernameUser) {
@@ -532,6 +560,9 @@ void updatePengajuan(Pengajuan data[], int jumlah, string usernameUser) {
 void hapusPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
     bersihkanLayar();
     int cari; 
+    cout << "\n========================================\n";
+    cout << "=            HAPUS PENGAJUAN           =\n";
+    cout << "========================================\n";
     cout << "Masukkan ID: "; cin >> cari;
     for (int i = 0; i < *jumlah; i++) {
         if (data[i].id == cari && data[i].usernamePengaju == usernameUser) {
@@ -558,7 +589,9 @@ void hapusPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
 // FUNGSI ADMIN: KELOLA PENGAJUAN
 void kelolaPengajuan(Pengajuan data[], int *jumlah, Hewan ternak[], int *jumlahTernak) {
     bersihkanLayar();
-    cout << "\n=== Kelola Pengajuan Masuk ===\n\n";
+    cout << "\n========================================\n";
+    cout << "=      KELOLA PENGAJUAN MASUK          =\n";
+    cout << "========================================\n\n";
     
     int countPending = 0;
     for (int i = 0; i < *jumlah; i++) {
@@ -585,11 +618,7 @@ void kelolaPengajuan(Pengajuan data[], int *jumlah, Hewan ternak[], int *jumlahT
     cout << "\nMasukkan nomor pengajuan yang ingin diproses (0 untuk batal): ";
     cin >> pilihan;
     
-    if (pilihan == 0) {
-        bersihkanLayar();
-        return;
-    }
-    
+    if (pilihan == 0) { bersihkanLayar(); return; }
     if (pilihan < 1 || pilihan > countPending) {
         cout << "Pilihan tidak valid!\n";
         cout << "Tekan Enter..."; cin.ignore(); cin.get();
@@ -601,10 +630,7 @@ void kelolaPengajuan(Pengajuan data[], int *jumlah, Hewan ternak[], int *jumlahT
     for (int i = 0; i < *jumlah; i++) {
         if (data[i].status == "pending") {
             counter++;
-            if (counter == pilihan) {
-                idx = i;
-                break;
-            }
+            if (counter == pilihan) { idx = i; break; }
         }
     }
     
@@ -644,7 +670,9 @@ void kelolaPengajuan(Pengajuan data[], int *jumlah, Hewan ternak[], int *jumlahT
 
 void tampilRiwayatPengajuan(Pengajuan data[], int jumlah) {
     bersihkanLayar();
-    cout << "\n=== Riwayat Semua Pengajuan ===\n\n";
+    cout << "\n========================================\n";
+    cout << "=      RIWAYAT SEMUA PENGAJUAN         =\n";
+    cout << "========================================\n\n";
     if (jumlah == 0) {
         cout << "Belum ada riwayat pengajuan.\n";
     } else {
@@ -662,7 +690,9 @@ void tampilRiwayatPengajuan(Pengajuan data[], int jumlah) {
 // LOGIN SYSTEM
 void registerAkun(vector<Akun>& users) {
     bersihkanLayar();
-    cout << "\n=== REGISTER (USER) ===\n";
+    cout << "\n========================================\n";
+    cout << "=           REGISTER (USER)            =\n";
+    cout << "========================================\n";
     string username, password;
     cout << "Buat Username : "; cin >> username;
     for (const auto& user : users) {
@@ -683,25 +713,33 @@ void registerAkun(vector<Akun>& users) {
 bool login(vector<Akun>& users, bool &isAdmin, string &loggedInUser) {
     bersihkanLayar();
     string u, p; int kesempatan = 3;
+    
     while (kesempatan > 0) {
-        cout << "\n=== LOGIN ===\n";
+        cout << "\n========================================\n";
+        cout << "=                LOGIN                 =\n";
+        cout << "========================================\n";
         cout << "Username : "; cin >> u;
         cout << "Password : "; cin >> p;
+        
         for (const auto& user : users) {
             if (user.username == u && user.password == p) {
-                cout << "Login berhasil sebagai " << (user.isAdmin ? "ADMIN" : "USER") << "!\n";
+                cout << "\nLogin berhasil sebagai " << (user.isAdmin ? "ADMIN" : "USER") << "!\n";
+                cout << "Selamat datang, " << user.username << "!\n";
                 isAdmin = user.isAdmin;
                 loggedInUser = user.username;
+                cin.ignore(); cin.get();
                 return true;
             }
         }
         kesempatan--;
-        cout << "Salah! Sisa kesempatan: " << kesempatan << endl;
+        cout << "\nSalah! Sisa kesempatan: " << kesempatan << endl;
+        if (kesempatan > 0) cout << "Tekan Enter untuk coba lagi..."; cin.ignore(); cin.get();
+        bersihkanLayar();
     }
     return false;
 }
 
-// MAIN
+// MAIN PROGRAM
 int main() {
     bersihkanLayar();
     vector<Akun> users;
@@ -733,10 +771,11 @@ int main() {
             if (sudahLogin) {
                 bersihkanLayar();
                 if (isAdmin) {
+                    // MENU ADMIN
                     int pilihan;
                     do {
                         cout << "\n========================================\n";
-                        cout << "=             MENU ADMIN               =\n";
+                        cout << "=              MENU ADMIN              =\n";
                         cout << "========================================\n";
                         cout << "1. Tambah Data hewan\n";
                         cout << "2. Tampilkan Data hewan\n";
@@ -763,6 +802,7 @@ int main() {
                     } while (pilihan != 9);
                     bersihkanLayar();
                 } else {
+                    // MENU USER
                     int pilihan;
                     do {
                         cout << "\n========================================\n";
@@ -790,7 +830,7 @@ int main() {
             }
         } else if (menuAwal == 3) {
             bersihkanLayar();
-            cout << "Program selesai. Terima kasih!\n";
+            cout << "\nProgram selesai. Terima kasih!\n";
         } else {
             cout << "Pilihan tidak tersedia!\n"; cin.ignore(); cin.get();
         }

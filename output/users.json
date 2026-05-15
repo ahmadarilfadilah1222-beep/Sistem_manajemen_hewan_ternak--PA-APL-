@@ -18,5 +18,20 @@
     "username": "Dika",
     "password": "130",
     "isAdmin": true
+  },
+  {
+    "username": "119",
+    "password": "11",
+    "isAdmin": false
+  },
+  {
+    "username": "bintang",
+    "password": "123",
+    "isAdmin": false
+  },
+  {
+    "username": "q",
+    "password": "1",
+    "isAdmin": false
   }
 ]

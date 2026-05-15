@@ -16,5 +16,14 @@
     "usernamePengaju": "1",
     "status": "ditolak",
     "timestamp": "Sat May 02 12:12:16 2026"
+  },
+  {
+    "id": 6,
+    "namaHewan": "babi",
+    "umur": 1,
+    "berat": 1.00,
+    "usernamePengaju": "q",
+    "status": "diterima",
+    "timestamp": "Sun May 10 16:08:10 2026"
   }
 ]

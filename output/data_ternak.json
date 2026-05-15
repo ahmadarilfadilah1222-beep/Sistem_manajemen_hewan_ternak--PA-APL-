@@ -34,5 +34,11 @@
     "nama": "babi",
     "umur": 1,
     "berat": 1
+  },
+  {
+    "id": 1,
+    "nama": "Bagas",
+    "umur": 12,
+    "berat": 115
   }
 ]

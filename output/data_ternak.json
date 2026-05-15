@@ -1,7 +1,37 @@
 [
   {
-    "id": 1,
-    "nama": "1",
+    "id": 2,
+    "nama": "sapi",
+    "umur": 5,
+    "berat": 210
+  },
+  {
+    "id": 3,
+    "nama": "kambing",
+    "umur": 11,
+    "berat": 1
+  },
+  {
+    "id": 4,
+    "nama": "kerbau",
+    "umur": 6,
+    "berat": 300
+  },
+  {
+    "id": 6,
+    "nama": "babi",
+    "umur": 4,
+    "berat": 43.4
+  },
+  {
+    "id": 9,
+    "nama": "domba",
+    "umur": 5,
+    "berat": 90
+  },
+  {
+    "id": 6,
+    "nama": "babi",
     "umur": 1,
     "berat": 1
   }

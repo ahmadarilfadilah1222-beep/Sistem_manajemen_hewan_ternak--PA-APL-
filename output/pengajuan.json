@@ -25,5 +25,23 @@
     "usernamePengaju": "q",
     "status": "diterima",
     "timestamp": "Sun May 10 16:08:10 2026"
+  },
+  {
+    "id": 2,
+    "namaHewan": "2",
+    "umur": 2,
+    "berat": 2.00,
+    "usernamePengaju": "1234",
+    "status": "pending",
+    "timestamp": "Sun May 17 21:59:15 2026"
+  },
+  {
+    "id": 5,
+    "namaHewan": "1",
+    "umur": 1,
+    "berat": 1.00,
+    "usernamePengaju": "1234",
+    "status": "pending",
+    "timestamp": "Sun May 17 22:52:50 2026"
   }
 ]

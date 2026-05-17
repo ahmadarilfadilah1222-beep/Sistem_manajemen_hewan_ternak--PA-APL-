@@ -43,6 +43,15 @@ void bersihkanLayar() {
     #endif
 }
 
+// Helper untuk menunggu input Enter (Hanya 1x tekan)
+void tungguEnter() {
+    cout << "\nTekan Enter untuk melanjutkan...";
+    // Buang semua sisa karakter di buffer sampai newline
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    // Tunggu satu karakter enter baru
+    cin.get();
+}
+
 string bersihkanString(string str) {
     try {
         str.erase(remove(str.begin(), str.end(), '\"'), str.end());
@@ -83,16 +92,33 @@ bool inputIntValid(int &output, const string &pesan) {
     string input;
     while (true) {
         cout << pesan;
-        if (!getline(cin, input)) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); }
+        if (!getline(cin, input)) { 
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        }
         if (input.empty() || isOnlyWhitespace(input)) {
             cout << "Input tidak boleh kosong!\n";
             continue;
         }
-        bool valid = true; size_t start = (input[0] == '-') ? 1 : 0;
+        bool valid = true; 
+        size_t start = (input[0] == '-') ? 1 : 0;
         if (start == input.length()) valid = false;
-        for (size_t i = start; i < input.length(); i++) if (!isdigit(static_cast<unsigned char>(input[i]))) { valid = false; break; }
-        if (!valid) { cout << "Harap masukkan angka yang valid!\n"; continue; }
-        try { output = stoi(input); return true; } catch (...) { cout << "Input tidak valid!\n"; }
+        for (size_t i = start; i < input.length(); i++) {
+            if (!isdigit(static_cast<unsigned char>(input[i]))) { 
+                valid = false; 
+                break; 
+            }
+        }
+        if (!valid) { 
+            cout << "Harap masukkan angka yang valid!\n"; 
+            continue; 
+        }
+        try { 
+            output = stoi(input); 
+            return true; 
+        } catch (...) { 
+            cout << "Input tidak valid!\n"; 
+        }
     }
 }
 
@@ -100,12 +126,20 @@ bool inputDoubleValid(double &output, const string &pesan) {
     string input;
     while (true) {
         cout << pesan;
-        if (!getline(cin, input)) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); }
+        if (!getline(cin, input)) { 
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        }
         if (input.empty() || isOnlyWhitespace(input)) {
             cout << "Input tidak boleh kosong!\n";
             continue;
         }
-        try { output = stod(input); return true; } catch (...) { cout << "Harap masukkan angka desimal yang valid!\n"; }
+        try { 
+            output = stod(input); 
+            return true; 
+        } catch (...) { 
+            cout << "Harap masukkan angka desimal yang valid!\n"; 
+        }
     }
 }
 
@@ -113,7 +147,10 @@ string inputStringNotEmpty(const string &pesan, int minLen = 1) {
     string input;
     while (true) {
         cout << pesan;
-        if (!getline(cin, input)) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); }
+        if (!getline(cin, input)) { 
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        }
         if (input.empty() || isOnlyWhitespace(input)) {
             cout << "Input tidak boleh kosong!\n";
             continue;
@@ -135,19 +172,32 @@ bool inputPilihanValid(int &output, const string &pesan, int min, int max) {
     string input;
     while (true) {
         cout << pesan;
-        if (!getline(cin, input)) { cin.clear(); cin.ignore(numeric_limits<streamsize>::max(), '\n'); }
+        if (!getline(cin, input)) { 
+            cin.clear(); 
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        }
         if (input.empty() || isOnlyWhitespace(input)) {
             cout << "Pilihan tidak boleh kosong!\n";
             continue;
         }
         bool isNum = true;
-        for (char c : input) if (!isdigit(static_cast<unsigned char>(c))) { isNum = false; break; }
-        if (!isNum) { cout << "Harap masukkan angka antara " << min << "-" << max << "!\n"; continue; }
+        for (char c : input) {
+            if (!isdigit(static_cast<unsigned char>(c))) { 
+                isNum = false; 
+                break; 
+            }
+        }
+        if (!isNum) { 
+            cout << "Harap masukkan angka antara " << min << "-" << max << "!\n"; 
+            continue; 
+        }
         try {
             output = stoi(input);
             if (output >= min && output <= max) return true;
             else cout << "Pilihan diluar range! Masukkan " << min << "-" << max << "\n";
-        } catch (...) { cout << "Input tidak valid!\n"; }
+        } catch (...) { 
+            cout << "Input tidak valid!\n"; 
+        }
     }
 }
 
@@ -348,10 +398,13 @@ void tambahData(Hewan ternak[], int *jumlah) {
 
     if (*jumlah >= 100) {
         cout << "Kapasitas data penuh (maks 100)!\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
+
+    // ✅ PENTING: Bersihkan buffer sebelum input pertama di fungsi ini
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     // Input ID dengan validasi ketat & cek duplikat
     int idBaru;
@@ -388,7 +441,7 @@ void tambahData(Hewan ternak[], int *jumlah) {
     string err;
     if (!validasiRangeHewan(umurBaru, beratBaru, err)) {
         cout << "Gagal tambah data: " << err << "\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -411,7 +464,7 @@ void tambahData(Hewan ternak[], int *jumlah) {
             break;
         } else if (firstChar == 'n') {
             cout << "Penambahan data dibatalkan.\n";
-            cout << "Tekan Enter..."; cin.ignore(); cin.get();
+            tungguEnter();
             bersihkanLayar();
             return;
         } else {
@@ -433,7 +486,7 @@ void tambahData(Hewan ternak[], int *jumlah) {
         cout << "\nGagal menyimpan data ke file!\n";
     }
     
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -449,7 +502,7 @@ void tampilData(Hewan ternak[], int jumlah) {
         tampilDataTabel(ternak, jumlah);
     }
     
-    cout << "\nTekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -461,7 +514,7 @@ void updateData(Hewan ternak[], int jumlah) {
 
     if (jumlah == 0) {
         cout << "Belum ada data hewan untuk diupdate.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -496,7 +549,7 @@ void updateData(Hewan ternak[], int jumlah) {
 
     if (idx == -1) {
         cout << "Data dengan ID " << cari << " tidak ditemukan!\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -519,7 +572,7 @@ void updateData(Hewan ternak[], int jumlah) {
             break;
         } else if (firstChar == 'n') {
             cout << "Update dibatalkan.\n";
-            cout << "Tekan Enter..."; cin.ignore(); cin.get();
+            tungguEnter();
             bersihkanLayar();
             return;
         } else {
@@ -535,7 +588,7 @@ void updateData(Hewan ternak[], int jumlah) {
     string err;
     if (!validasiRangeHewan(ternak[idx].umur, ternak[idx].berat, err)) {
         cout << "Gagal update: " << err << "\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -545,7 +598,7 @@ void updateData(Hewan ternak[], int jumlah) {
     } else {
         cout << "\nGagal menyimpan data ke file!\n";
     }
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -557,7 +610,7 @@ void hapusData(Hewan ternak[], int *jumlah) {
 
     if (*jumlah == 0) {
         cout << "Belum ada data hewan untuk dihapus.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -577,7 +630,7 @@ void hapusData(Hewan ternak[], int *jumlah) {
 
     if (idx == -1) {
         cout << "Data tidak ditemukan!\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -598,7 +651,7 @@ void hapusData(Hewan ternak[], int *jumlah) {
             break;
         } else if (firstChar == 'n') {
             cout << "Penghapusan dibatalkan.\n";
-            cout << "Tekan Enter..."; cin.ignore(); cin.get();
+            tungguEnter();
             bersihkanLayar();
             return;
         } else {
@@ -612,7 +665,7 @@ void hapusData(Hewan ternak[], int *jumlah) {
     if(simpanDataKeFile(ternak, *jumlah)) cout << "Data berhasil dihapus!\n";
     else cout << "Gagal menyimpan perubahan!\n";
     
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -624,7 +677,7 @@ void sortingNama(Hewan ternak[], int jumlah, bool ascend) {
     if(ascend) { sort(temp, temp + jumlah, [](Hewan a, Hewan b) { return a.nama < b.nama; }); cout << "Sorting: Nama (A-Z)\n\n"; }
     else { sort(temp, temp + jumlah, [](Hewan a, Hewan b) { return a.nama > b.nama; }); cout << "Sorting: Nama (Z-A)\n\n"; }
     tampilDataTabel(temp, jumlah);
-    cout << "\nTekan Enter..."; cin.ignore(); cin.get(); bersihkanLayar();
+    cout << "\n"; tungguEnter(); bersihkanLayar();
 }
 
 void sortingUmur(Hewan ternak[], int jumlah, bool ascend) {
@@ -632,7 +685,7 @@ void sortingUmur(Hewan ternak[], int jumlah, bool ascend) {
     if(ascend) { sort(temp, temp + jumlah, [](Hewan a, Hewan b) { return a.umur < b.umur; }); cout << "Sorting: Umur (Muda -> Tua)\n\n"; }
     else { sort(temp, temp + jumlah, [](Hewan a, Hewan b) { return a.umur > b.umur; }); cout << "Sorting: Umur (Tua -> Muda)\n\n"; }
     tampilDataTabel(temp, jumlah);
-    cout << "\nTekan Enter..."; cin.ignore(); cin.get(); bersihkanLayar();
+    cout << "\n"; tungguEnter(); bersihkanLayar();
 }
 
 void sortingBerat(Hewan ternak[], int jumlah, bool ascend) {
@@ -640,7 +693,7 @@ void sortingBerat(Hewan ternak[], int jumlah, bool ascend) {
     if(ascend) { sort(temp, temp + jumlah, [](Hewan a, Hewan b) { return a.berat < b.berat; }); cout << "Sorting: Berat (Ringan -> Berat)\n\n"; }
     else { sort(temp, temp + jumlah, [](Hewan a, Hewan b) { return a.berat > b.berat; }); cout << "Sorting: Berat (Berat -> Ringan)\n\n"; }
     tampilDataTabel(temp, jumlah);
-    cout << "\nTekan Enter..."; cin.ignore(); cin.get(); bersihkanLayar();
+    cout << "\n"; tungguEnter(); bersihkanLayar();
 }
 
 void menuSorting(Hewan ternak[], int jumlah) {
@@ -677,7 +730,7 @@ void cariData(Hewan ternak[], int jumlah) {
     
     if (jumlah == 0) {
         cout << "Belum ada data hewan untuk dicari.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -700,7 +753,7 @@ void cariData(Hewan ternak[], int jumlah) {
         }
     }
     if (!ditemukan) cout << "Data dengan ID " << cari << " tidak ditemukan!\n";
-    cout << "\nTekan Enter..."; cin.ignore(); cin.get();
+    cout << "\n"; tungguEnter();
     bersihkanLayar();
 }
 
@@ -713,11 +766,12 @@ void tambahPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
 
     if (*jumlah >= 100) {
         cout << "Kapasitas pengajuan penuh!\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
 
+    // ✅ PERBAIKAN KRUSIAL: Buang sisa newline dari menu sebelumnya
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     int idBaru;
@@ -748,7 +802,7 @@ void tambahPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
     string err;
     if (!validasiRangeHewan(data[*jumlah].umur, data[*jumlah].berat, err)) {
         cout << err << "\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -766,7 +820,7 @@ void tambahPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
         cout << "Status: Menunggu persetujuan admin\n";
     }
 
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -778,7 +832,7 @@ void tampilPengajuanUser(Pengajuan data[], int jumlah, string usernameUser) {
     
     tampilTabelPengajuanUser(data, jumlah, usernameUser);
     
-    cout << "\nTekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -790,7 +844,7 @@ void updatePengajuan(Pengajuan data[], int jumlah, string usernameUser) {
 
     if (jumlah == 0) {
         cout << "Belum ada pengajuan.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -816,14 +870,14 @@ void updatePengajuan(Pengajuan data[], int jumlah, string usernameUser) {
 
     if (idx == -1) {
         cout << "ID tidak ditemukan atau bukan milik Anda!\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
 
     if (data[idx].status != "pending") {
         cout << "Pengajuan dengan status '" << data[idx].status << "' tidak dapat diubah.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -842,7 +896,7 @@ void updatePengajuan(Pengajuan data[], int jumlah, string usernameUser) {
         if (firstChar == 'y') break;
         else if (firstChar == 'n') {
             cout << "Update dibatalkan.\n";
-            cout << "Tekan Enter..."; cin.ignore(); cin.get();
+            tungguEnter();
             bersihkanLayar();
             return;
         } else {
@@ -858,7 +912,7 @@ void updatePengajuan(Pengajuan data[], int jumlah, string usernameUser) {
     string err;
     if (!validasiRangeHewan(data[idx].umur, data[idx].berat, err)) {
         cout << err << "\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -869,7 +923,7 @@ void updatePengajuan(Pengajuan data[], int jumlah, string usernameUser) {
     } else {
         cout << "\nGagal menyimpan perubahan!\n";
     }
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -880,7 +934,7 @@ void hapusPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
     cout << "==============================================================\n";
     if (*jumlah == 0) {
         cout << "Belum ada pengajuan.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -906,14 +960,14 @@ void hapusPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
 
     if (idx == -1) {
         cout << "ID tidak ditemukan atau bukan milik Anda!\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
 
     if (data[idx].status != "pending") {
         cout << "Pengajuan dengan status '" << data[idx].status << "' tidak dapat dihapus.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
@@ -931,7 +985,7 @@ void hapusPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
         if (firstChar == 'y') break;
         else if (firstChar == 'n') {
             cout << "Penghapusan dibatalkan.\n";
-            cout << "Tekan Enter..."; cin.ignore(); cin.get();
+            tungguEnter();
             bersihkanLayar();
             return;
         } else {
@@ -947,7 +1001,7 @@ void hapusPengajuan(Pengajuan data[], int *jumlah, string usernameUser) {
     } else {
         cout << "Gagal menyimpan perubahan!\n";
     }
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -974,27 +1028,27 @@ void kelolaPengajuan(Pengajuan data[], int *jumlah, Hewan ternak[], int *jumlahT
     
     if (countPending == 0) {
         cout << "Tidak ada pengajuan pending.\n";
-        cout << "Tekan Enter..."; cin.ignore(); cin.get();
+        tungguEnter();
         bersihkanLayar();
         return;
     }
     
     int pilihan;
     string prompt = "Masukkan nomor pengajuan yang ingin diproses (0 untuk batal): ";
-    if (!inputPilihanValid(pilihan, prompt, 0, countPending)) { cout << "Tekan Enter..."; cin.ignore(); cin.get(); bersihkanLayar(); return; }
+    if (!inputPilihanValid(pilihan, prompt, 0, countPending)) { tungguEnter(); bersihkanLayar(); return; }
     if (pilihan == 0) { bersihkanLayar(); return; }
     
     int idx = -1, counter = 0;
     for (int i = 0; i < *jumlah; i++) {
         if (data[i].status == "pending") { counter++; if (counter == pilihan) { idx = i; break; } }
     }
-    if (idx == -1) { cout << "Pilihan tidak valid!\n"; cout << "Tekan Enter..."; cin.ignore(); cin.get(); bersihkanLayar(); return; }
+    if (idx == -1) { cout << "Pilihan tidak valid!\n"; tungguEnter(); bersihkanLayar(); return; }
     
     int aksi;
     cout << "\nApa yang ingin Anda lakukan?\n";
     cout << "1. Terima Pengajuan\n";
     cout << "2. Tolak Pengajuan\n";
-    if (!inputPilihanValid(aksi, "Pilih: ", 1, 2)) { cout << "Pilihan tidak valid!\n"; cout << "Tekan Enter..."; cin.ignore(); cin.get(); bersihkanLayar(); return; }
+    if (!inputPilihanValid(aksi, "Pilih: ", 1, 2)) { cout << "Pilihan tidak valid!\n"; tungguEnter(); bersihkanLayar(); return; }
     
     if (aksi == 1) {
         if (*jumlahTernak >= 100) {
@@ -1015,7 +1069,7 @@ void kelolaPengajuan(Pengajuan data[], int *jumlah, Hewan ternak[], int *jumlahT
         simpanPengajuanKeFile(data, *jumlah);
         cout << "\nPengajuan DITOLAK.\n";
     }
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     bersihkanLayar();
 }
 
@@ -1026,7 +1080,7 @@ void tampilRiwayatPengajuan(Pengajuan data[], int jumlah) {
     cout << "========================================\n\n";
     if (jumlah == 0) cout << "Belum ada riwayat pengajuan.\n";
     else for (int i = 0; i < jumlah; i++) cout << "[" << data[i].status << "] ID Peng:" << data[i].id << " | " << data[i].namaHewan << " | Pengaju: " << data[i].usernamePengaju << " | " << data[i].timestamp << "\n";
-    cout << "\nTekan Enter..."; cin.ignore(); cin.get();
+    cout << "\n"; tungguEnter();
     bersihkanLayar();
 }
 
@@ -1039,7 +1093,7 @@ void registerAkun(vector<Akun>& users) {
     string username, password;
     
     while (true) {
-        username = inputStringNotEmpty("Buat Username (min 3 karakter): ", 3);
+        username = inputStringNotEmpty("Buat Username : ", 3);
         bool exists = false;
         for (const auto& user : users) {
             if (user.username == username) {
@@ -1051,14 +1105,15 @@ void registerAkun(vector<Akun>& users) {
         if (!exists) break;
     }
     
-    password = inputStringNotEmpty("Buat Password (min 4 karakter): ", 4);
+    password = inputStringNotEmpty("Buat Password : ", 4);
     
     try {
         users.push_back({username, password, false});
         simpanUsersKeFile(users);
         cout << "\nRegister berhasil! Silakan login.\n";
     } catch (...) { cout << "\nGagal menyimpan data user.\n"; users.pop_back(); }
-    cout << "Tekan Enter..."; cin.ignore(); cin.get(); bersihkanLayar();
+    tungguEnter();
+    bersihkanLayar();
 }
 
 bool login(vector<Akun>& users, bool &isAdmin, string &loggedInUser) {
@@ -1098,7 +1153,7 @@ bool login(vector<Akun>& users, bool &isAdmin, string &loggedInUser) {
                     cout << "\nLogin berhasil sebagai " << (user.isAdmin ? "ADMIN" : "USER") << "!\n";
                     cout << "Selamat datang, " << user.username << "!\n";
                     isAdmin = user.isAdmin; loggedInUser = user.username; 
-                    cin.ignore(); cin.get(); 
+                    tungguEnter();
                     return true;
                 }
             }
@@ -1107,12 +1162,12 @@ bool login(vector<Akun>& users, bool &isAdmin, string &loggedInUser) {
         kesempatan--;
         if (kesempatan > 0) {
             cout << "\nUsername atau password salah!\n";
-            cout << "Tekan Enter untuk coba lagi..."; cin.ignore(); cin.get();
+            cout << "Tekan Enter untuk coba lagi..."; cin.get();
             bersihkanLayar();
         }
     }
     cout << "\nAkun dikunci sementara (3x gagal). Coba lagi nanti.\n";
-    cout << "Tekan Enter..."; cin.ignore(); cin.get();
+    tungguEnter();
     return false;
 }
 
@@ -1177,7 +1232,7 @@ int main() {
                         else if (pilihan == 8) tampilRiwayatPengajuan(pengajuan, jumlahPengajuan);
                         else if (pilihan == 9) {
                             cout << "Logging out...\n";
-                            bersihkanLayar();
+                            tungguEnter();
                         }
                     } while (pilihan != 9);
                     bersihkanLayar();
@@ -1204,7 +1259,7 @@ int main() {
                         else if (pilihan == 5) hapusPengajuan(pengajuan, &jumlahPengajuan, currentUser);
                         else if (pilihan == 6) {
                             cout << "Logging out...\n";
-                            bersihkanLayar();
+                            tungguEnter();
                         }
                     } while (pilihan != 6);
                     bersihkanLayar();

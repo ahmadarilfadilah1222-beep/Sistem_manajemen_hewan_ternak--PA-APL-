@@ -36,9 +36,15 @@
     "berat": 1
   },
   {
-    "id": 1,
-    "nama": "Bagas",
-    "umur": 12,
-    "berat": 115
+    "id": 7,
+    "nama": "7",
+    "umur": 7,
+    "berat": 7
+  },
+  {
+    "id": 0,
+    "nama": "1",
+    "umur": 1,
+    "berat": 1
   }
 ]
